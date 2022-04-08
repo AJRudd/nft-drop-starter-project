@@ -1,0 +1,19 @@
+{
+  "name": "BathtubKayaker",
+  "symbol": "!",
+  "image": "1.png",
+  "properties": {
+    "files": [
+      {
+        "uri": "1.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "GEaQ3GqgRb8XsDDrH2PDu2QL9G5REDJ7suopPC9SResf",
+        "share": 100
+      }
+    ]
+  }
+}

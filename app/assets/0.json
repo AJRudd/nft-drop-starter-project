@@ -1,0 +1,19 @@
+{
+  "name": "OrangutanLicker",
+  "symbol": "!!",
+  "image": "0.png",
+  "properties": {
+    "files": [
+      {
+        "uri": "0.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "GEaQ3GqgRb8XsDDrH2PDu2QL9G5REDJ7suopPC9SResf",
+        "share": 100
+      }
+    ]
+  }
+}
