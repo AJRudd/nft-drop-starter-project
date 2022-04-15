@@ -69,8 +69,8 @@ const App = () => {
       <div className="App">
         <div className="container">
           <div className="header-container">
-            <p className="header">🍭 Candy Drop</p>
-            <p className="sub-text">NFT drop machine with fair mint</p>
+            <p className="header">👽 Project G</p>
+            <p className="sub-text">Mint the NFT of your dreams</p>
             {!walletAddress && renderNotConnectedContainer()}
           </div>
           {/* Check for walletAddress and then pass in walletAddress */}

@@ -4,6 +4,8 @@ import { Program, Provider, web3 } from '@project-serum/anchor';
 import { MintLayout, TOKEN_PROGRAM_ID, Token } from '@solana/spl-token';
 import { sendTransactions } from './connection';
 import './CandyMachine.css';
+import CountdownTimer from '../CountdownTimer';
+
 import {
   candyMachineProgram,
   TOKEN_METADATA_PROGRAM_ID,
@@ -23,14 +25,10 @@ const CandyMachine = ({ walletAddress }) => {
 
   // Add state property inside your component like this
   const [candyMachine, setCandyMachine] = useState(null);
-
-  const getCandyMachineCreator = async (candyMachine) => {
-    const candyMachineID = new PublicKey(candyMachine);
-    return await web3.PublicKey.findProgramAddress(
-        [Buffer.from('candy_machine'), candyMachineID.toBuffer()],
-        candyMachineProgram,
-    );
-  };
+  const [mints, setMints] = useState([]);
+  // Add these two state properties
+  const [isMinting, setIsMinting] = useState(false);
+  const [isLoadingMints, setIsLoadingMints] = useState(false);
 
   useEffect(() => {
    getCandyMachineState();
@@ -116,6 +114,15 @@ const CandyMachine = ({ walletAddress }) => {
 });
 };
 
+
+
+  const getCandyMachineCreator = async (candyMachine) => {
+    const candyMachineID = new PublicKey(candyMachine);
+    return await web3.PublicKey.findProgramAddress(
+        [Buffer.from('candy_machine'), candyMachineID.toBuffer()],
+        candyMachineProgram,
+    );
+  };
 
   const getMetadata = async (mint) => {
     return (
@@ -385,15 +392,48 @@ const CandyMachine = ({ walletAddress }) => {
     return [];
   };
 
+  const renderMintedItems = () => (
+      <div className="gif-container">
+        <p className="sub-text">Minted Items </p>
+        <div className="gif-grid">
+          {mints.map((mint) => (
+            <div className="gif-item" key={mint}>
+              <img src={mint} alt={"Minted NFT ${mint}"}/>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+
+    // Create render function
+    const renderDropTimer = () => {
+      // Get the current date and dropDate in a JavaScript Date object
+      const currentDate = new Date();
+      const dropDate = new Date(candyMachine.state.goLiveData * 1000);
+
+      // If currentDate is before dropDate, render our Countdown component
+      if (currentDate < dropDate) {
+        console.log('Before drop date!');
+        // Don't forget to pass over your dropDate!
+        return <CountdownTimer dropDate={dropDate} />;
+      }
+
+      // Else let's just return the current drop date
+      return <p>{`Drop Date: ${candyMachine.state.goLiveDateTimeString}`}</p>;
+    };
+
   return (
       // Only show this if machineStats is available
       candyMachine && (
         <div className="machine-container">
-          <p>{`Drop Date: ${candyMachine.goLiveDateTimeString}`}</p>
-          <p>{`Items Minted: ${candyMachine.itemsRedeemed} / ${candyMachine.itemsAvailable}`}</p>
+          {/*Add this at the beginning of our component} */}
+          {renderDropTimer()}
+          <p>{`Items Minted: ${candyMachine.state.itemsRedeemed} / ${candyMachine.state.itemsAvailable}`}</p>
           <button className="cta-button mint-button" onClick={mintToken}>
               Mint NFT
           </button>
+          {mints.length > 0 && renderMintedItems()}
+          {isLoadingMints && <p>LOADING MINTS...</p>}
         </div>
       )
     );
